@@ -30,6 +30,7 @@ namespace API.Transformers
                 ["firstName"] = new OpenApiString(new Faker("en").Person.FirstName),
                 ["middleName"] = new OpenApiString(new Faker("en").Person.LastName),
                 ["lastName"] = new OpenApiString(new Faker("en").Person.LastName),
+                ["email"] = new OpenApiString(new Faker("en").Person.Email),
                 ["role"] = new OpenApiString(new Faker("en").PickRandom(new[] { "User", "Admin" }))
             };
 
@@ -38,6 +39,7 @@ namespace API.Transformers
                 ["firstName"] = new OpenApiString(new Faker("en").Person.FirstName),
                 ["middleName"] = new OpenApiString(new Faker("en").Person.LastName),
                 ["lastName"] = new OpenApiString(new Faker("en").Person.LastName),
+                ["email"] = new OpenApiString(new Faker("en").Person.Email),
                 ["role"] = new OpenApiString(new Faker("en").PickRandom(new[] { "User", "Admin" }))
             };
         }
