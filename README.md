@@ -19,6 +19,7 @@ UserManagement/
 ├── Infrastructure/
 │   ├── Data/            - Database context
 │   ├── Migrations/      - EF Core migrations
+│   ├── Builders/        - Data query filters
 │   └── Repositories/    - Data access implementations
 │
 └── UserManagement.sln   - Solution file

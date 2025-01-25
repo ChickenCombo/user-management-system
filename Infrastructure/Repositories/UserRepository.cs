@@ -1,6 +1,7 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Queries;
+using Infrastructure.Builders;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,16 +13,19 @@ namespace Infrastructure.Repositories
 
         public async Task<(List<User>, int)> GetAllAsync(UserQuery userQuery)
         {
-            var users = _context.User.AsQueryable();
+            var userQueryBuilder = new UserQueryBuilder(_context.User.AsQueryable());
 
-            if (!string.IsNullOrWhiteSpace(userQuery.Role))
-            {
-                users = users.Where(u => u.Role == userQuery.Role);
-            }
+            var filteredUsers = userQueryBuilder
+                .FilterByFirstName(userQuery.FirstName)
+                .FilterByMiddleName(userQuery.MiddleName)
+                .FilterByLastName(userQuery.LastName)
+                .FilterByRole(userQuery.Role)
+                .FilterByEmail(userQuery.Email)
+                .Query();
 
-            var totalCount = await users.CountAsync();
+            var totalCount = await filteredUsers.CountAsync();
             var skipNumber = (userQuery.PageNumber - 1) * userQuery.PageSize;
-            var queriedItems = await users.Skip(skipNumber).Take(userQuery.PageSize).ToListAsync();
+            var queriedItems = await filteredUsers.Skip(skipNumber).Take(userQuery.PageSize).ToListAsync();
 
             return (queriedItems, totalCount);
         }
@@ -58,6 +62,7 @@ namespace Infrastructure.Repositories
             existingUser.FirstName = user.FirstName;
             existingUser.MiddleName = user.MiddleName;
             existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
             existingUser.Role = user.Role;
 
             await _context.SaveChangesAsync();
