@@ -1,5 +1,4 @@
-
-using API.DTOs;
+using API.DTOs.User;
 using Bogus;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Any;

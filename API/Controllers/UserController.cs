@@ -1,4 +1,4 @@
-using API.DTOs;
+using API.DTOs.User;
 using API.Mappers;
 using Core.Entities;
 using Core.Interfaces;
