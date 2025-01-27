@@ -1,11 +1,12 @@
 using API.DTOs.User;
+using API.Helper;
 using API.Mappers;
 using Core.Entities;
-using Core.Interfaces;
 using Core.Queries;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace API.Controllers
 {
@@ -41,14 +42,8 @@ namespace API.Controllers
         {
             var (users, totalCount) = await _uow.UserRepository.GetAllAsync(userQuery);
             var usersDto = users.Select(u => u.ToDto()).ToList();
-            var pagination = new
-            {
-                TotalCount = totalCount,
-                PageNumber = userQuery.PageNumber,
-                PageSize = userQuery.PageSize
-            };
 
-            Response.Headers["X-Pagination"] = JsonConvert.SerializeObject(pagination);
+            PaginationHelper.SetPaginationHeader(Response, totalCount, userQuery.PageNumber, userQuery.PageSize);
 
             return Ok(usersDto);
         }
