@@ -45,7 +45,6 @@ namespace Infrastructure.Repositories
         public async Task<User> CreateAsync(User user)
         {
             await _context.User.AddAsync(user);
-            await _context.SaveChangesAsync();
 
             return user;
         }
@@ -65,8 +64,6 @@ namespace Infrastructure.Repositories
             existingUser.Email = user.Email;
             existingUser.Role = user.Role;
 
-            await _context.SaveChangesAsync();
-
             return existingUser;
         }
 
@@ -80,7 +77,6 @@ namespace Infrastructure.Repositories
             }
 
             _context.Remove(user);
-            await _context.SaveChangesAsync();
 
             return user;
         }

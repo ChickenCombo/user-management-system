@@ -1,6 +1,7 @@
 using API.Transformers;
 using Core.Interfaces;
 using Infrastructure;
+using Infrastructure.Interfaces;
 using Infrastructure.Repositories;
 using Newtonsoft.Json;
 using Scalar.AspNetCore;
@@ -8,6 +9,7 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddProblemDetails();
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -32,9 +34,7 @@ builder.Services.AddOpenApi(options =>
 });
 builder.Services.AddAuthentication().AddJwtBearer();
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

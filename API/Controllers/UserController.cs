@@ -3,6 +3,7 @@ using API.Mappers;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Queries;
+using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,9 +11,9 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IUserRepository userRepository) : ControllerBase
+    public class UserController(IUnitOfWork uow) : ControllerBase
     {
-        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IUnitOfWork _uow = uow;
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType<UserDto>(StatusCodes.Status200OK)]
@@ -21,7 +22,7 @@ namespace API.Controllers
         [EndpointDescription("Fetches the user details corresponding to the provided GUID.")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _uow.UserRepository.GetByIdAsync(id);
 
             if (user == null)
             {
@@ -38,7 +39,7 @@ namespace API.Controllers
 
         public async Task<IActionResult> GetAll([FromQuery] UserQuery userQuery)
         {
-            var (users, totalCount) = await _userRepository.GetAllAsync(userQuery);
+            var (users, totalCount) = await _uow.UserRepository.GetAllAsync(userQuery);
             var usersDto = users.Select(u => u.ToDto()).ToList();
             var pagination = new
             {
@@ -58,7 +59,9 @@ namespace API.Controllers
         [EndpointDescription("Creates a new user based on the provided user data.")]
         public async Task<IActionResult> Create([FromBody] CreateUserDto createUserDto)
         {
-            var user = await _userRepository.CreateAsync(createUserDto.ToModelFromCreate());
+            var user = await _uow.UserRepository.CreateAsync(createUserDto.ToModelFromCreate());
+
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new { id = user.Id }, user.ToDto());
         }
@@ -80,12 +83,14 @@ namespace API.Controllers
                 Role = updateUserDto.Role,
             };
 
-            var updatedUser = await _userRepository.UpdateAsync(id, user);
+            var updatedUser = await _uow.UserRepository.UpdateAsync(id, user);
 
             if (updatedUser == null)
             {
                 return NotFound();
             }
+
+            await _uow.SaveChangesAsync();
 
             return Ok(updatedUser.ToDto());
         }
@@ -97,12 +102,14 @@ namespace API.Controllers
         [EndpointDescription("Deletes the user identified by the provided GUID.")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var user = await _userRepository.DeleteAsync(id);
+            var user = await _uow.UserRepository.DeleteAsync(id);
 
             if (user == null)
             {
                 return NotFound();
             }
+
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
