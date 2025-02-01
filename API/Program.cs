@@ -1,4 +1,5 @@
 using API.BuilderServices;
+using API.Endpoints;
 using Infrastructure;
 using Infrastructure.Interfaces;
 using Infrastructure.Repositories;
@@ -28,6 +29,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapUserEndpoint();
 
 app.Run();
