@@ -7,22 +7,28 @@ This demo project highlights the implementation of a .NET 9 Web API following th
 ```
 UserManagement/
 ├── API/
-│   ├── Controllers/     - API endpoints
-│   ├── DTOs/            - Data Transfer Objects
-│   ├── Mappers/         - Entity-DTO mapping
-│   └── Program.cs       - Entry point
+│   ├── Endpoints/       - API route definitions and configurations
+│   ├── Handlers/        - Request handlers for processing API requests
+│   ├── DTOs/            - Data Transfer Objects for communication with clients
+│   ├── Mappers/         - Logic for mapping entities to DTOs
+│   ├── Transformers/    - Transformers for OpenAPI-related objects.
+│   ├── Helpers/         - Utility classes and functions used across the API layer
+│   ├── BuilderServices/ - Service registrations and dependency configuration
+│   └── Program.cs       - Application entry point and API setup
 │
 ├── Core/
-│   ├── Entities/        - Domain models
-│   └── Interfaces/      - Repository contracts
+│   ├── Entities/        - Core domain models representing business objects
+│   ├── Interfaces/      - Repository and service contracts for core operations
+│   └── Queries/         - Query parameters and filtering logic
 │
 ├── Infrastructure/
-│   ├── Data/            - Database context
-│   ├── Migrations/      - EF Core migrations
-│   ├── Builders/        - Data query filters
-│   └── Repositories/    - Data access implementations
+│   ├── Data/            - Database context and EF Core configuration
+│   ├── Migrations/      - EF Core database migrations
+│   ├── QueryBuilders/   - Query construction and filtering logic for data queries
+│   ├── Repositories/    - Data access implementations (e.g., repository pattern)
+│   └── Interfaces/      - Contracts for infrastructure-related services
 │
-└── UserManagement.sln   - Solution file
+└── UserManagement.sln   - Solution file for the project
 ```
 
 ## Getting Started
@@ -55,15 +61,19 @@ cd user-management-system
   "DefaultConnection": "Server=YOUR_SERVER;Database=YOUR_DATABASE;Trusted_Connection=True;"
 }
 ```
+
 2. Run the migrations to setup the database schema:
+
 ```
 dotnet ef database update --project Infrastructure --startup-project API
 ```
 
 ### Run the API
-Start the application (use `watch` for development): 
+
+Start the application (use `watch` for development):
 
 ```
 dotnet run --project API/API.csproj
 ```
+
 The application will run on http://localhost:5035/ by default.
