@@ -1,7 +1,7 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Queries;
-using Infrastructure.Builders;
+using Infrastructure.QueryBuilders;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

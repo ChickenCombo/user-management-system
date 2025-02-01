@@ -1,6 +1,6 @@
 using Core.Entities;
 
-namespace Infrastructure.Builders
+namespace Infrastructure.QueryBuilders
 {
     public class UserQueryBuilder(IQueryable<User> query)
     {
