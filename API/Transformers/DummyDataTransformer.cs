@@ -8,13 +8,11 @@ namespace API.Transformers
 {
     internal sealed class DummyDataTransformer : IOpenApiSchemaTransformer
     {
-        private static readonly Dictionary<Type, IOpenApiAny> _examples = [];
+        private static readonly Dictionary<Type, IOpenApiAny> _examples;
 
         public Task TransformAsync(OpenApiSchema schema, OpenApiSchemaTransformerContext context, CancellationToken cancellationToken)
         {
-            var type = context.JsonTypeInfo.Type;
-
-            if (_examples.TryGetValue(type, out var example))
+            if (_examples.TryGetValue(context.JsonTypeInfo.Type, out var example))
             {
                 schema.Example = example;
             }
@@ -22,24 +20,26 @@ namespace API.Transformers
             return Task.CompletedTask;
         }
 
-        public DummyDataTransformer()
+        static DummyDataTransformer()
         {
-            _examples[typeof(CreateUserDto)] = new OpenApiObject
+            _examples = new Dictionary<Type, IOpenApiAny>
             {
-                ["firstName"] = new OpenApiString(new Faker("en").Person.FirstName),
-                ["middleName"] = new OpenApiString(new Faker("en").Person.LastName),
-                ["lastName"] = new OpenApiString(new Faker("en").Person.LastName),
-                ["email"] = new OpenApiString(new Faker("en").Person.Email),
-                ["role"] = new OpenApiString(new Faker("en").PickRandom(new[] { "User", "Admin" }))
-            };
-
-            _examples[typeof(UpdateUserDto)] = new OpenApiObject
-            {
-                ["firstName"] = new OpenApiString(new Faker("en").Person.FirstName),
-                ["middleName"] = new OpenApiString(new Faker("en").Person.LastName),
-                ["lastName"] = new OpenApiString(new Faker("en").Person.LastName),
-                ["email"] = new OpenApiString(new Faker("en").Person.Email),
-                ["role"] = new OpenApiString(new Faker("en").PickRandom(new[] { "User", "Admin" }))
+                [typeof(CreateUserDto)] = new OpenApiObject
+                {
+                    ["firstName"] = new OpenApiString(new Faker("en").Person.FirstName),
+                    ["middleName"] = new OpenApiString(new Faker("en").Person.LastName),
+                    ["lastName"] = new OpenApiString(new Faker("en").Person.LastName),
+                    ["email"] = new OpenApiString(new Faker("en").Person.Email),
+                    ["role"] = new OpenApiString(new Faker("en").PickRandom(new[] { "User", "Admin" }))
+                },
+                [typeof(UpdateUserDto)] = new OpenApiObject
+                {
+                    ["firstName"] = new OpenApiString(new Faker("en").Person.FirstName),
+                    ["middleName"] = new OpenApiString(new Faker("en").Person.LastName),
+                    ["lastName"] = new OpenApiString(new Faker("en").Person.LastName),
+                    ["email"] = new OpenApiString(new Faker("en").Person.Email),
+                    ["role"] = new OpenApiString(new Faker("en").PickRandom(new[] { "User", "Admin" }))
+                }
             };
         }
     }
