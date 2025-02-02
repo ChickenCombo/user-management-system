@@ -8,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddOpenAPIServices();
-builder.Services.AddProblemDetails();
 builder.Services.AddCORSServices();
+builder.Services.AddErrorHandling();
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
